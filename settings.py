@@ -7,5 +7,8 @@ class Settings():
         self.screen_width = 1500
         self.screen_height = 800
         self.bg_color = (250,250,250)
+        self.view = 'room_view'
+        self.current_room = None
+        self.current_puzzle = None
        
         

@@ -18,12 +18,17 @@ class Puzzle(Sprite):
         # return a width and height of an image
         self.size = self.image.get_size()
         # resize
-        self.image = pygame.transform.scale(self.image, (300, 300))
+        self.image = pygame.transform.scale(self.image, (700, 700))
+        self.room_image = pygame.transform.scale(self.image, (300, 300))
         self.rect = self.image.get_rect()
+        self.room_rect = self.room_image.get_rect()
+
 
         # Start each new puzzle near the top left of the screen.
-        self.rect.x = 200
-        self.rect.y = 200
+        self.rect.x = 430
+        self.rect.y = 100
+        self.room_rect.x = 200
+        self.room_rect.y = 200
         self.image_path  = image_path
         self.answer = answer
 
@@ -41,21 +46,24 @@ class Puzzle(Sprite):
     def set_orientation(self,orientation):
 
         try:
-            self.image = pygame.image.load(self.image_path + '_' + orientation)
+            self.room_image = pygame.image.load(self.image_path + '_' + orientation)
 
         except:
             self.save_perspective_image(orientation)
-            self.image = pygame.image.load(self.image_path + '_' + orientation)
+            self.room_image = pygame.image.load(self.image_path + '_' + orientation)
         
         if orientation == 'left':
-            self.rect.x = 100
-            self.rect.y = 250
+            self.room_rect.x = 100
+            self.room_rect.y = 250
         elif orientation == 'center':
-            self.rect.x = 670
-            self.rect.y = 350
+            self.room_rect.x = 670
+            self.room_rect.y = 350
         elif orientation == 'right':
-            self.rect.x = 1050
-            self.rect.y = 250
-        
-    def blitme(self):
+            self.room_rect.x = 1050
+            self.room_rect.y = 250
+    
+    def blit_puzzle(self):
         self.screen.blit(self.image, self.rect)
+        
+    def blit_to_room(self):
+        self.screen.blit(self.room_image, self.room_rect)

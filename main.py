@@ -36,6 +36,8 @@ def run_game():
     
     dots = []
     drawing = False
+    settings.current_room = my_room
+    mouse_x,mouse_y = 0,0
     # Start the main loop for the game.
     while True:
         # Redraw the screen during each pass through the loop.
@@ -44,17 +46,38 @@ def run_game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and settings.view == 'puzzle_view':  
                 drawing = True
                 dots.append([])
             elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 drawing = False
+                if settings.view == 'room_view': 
+                    mouse_x, mouse_y = event.pos
+                    puzzle_clicked = settings.current_room.get_puzzle_clicked(mouse_x,mouse_y)
+                    if puzzle_clicked:
+                        settings.view = 'puzzle_view'
+                        settings.current_puzzle = puzzle_clicked
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and settings.view == 'puzzle_view':
                     drawing = False
-                    dots.pop()
+                    if dots: 
+                        dots.pop()
+                elif event.key == pygame.K_ESCAPE:
+                    settings.view = 'room_view'
+                    settings.current_puzzle = None
+                    dots = []
+            elif event.type == pygame.MOUSEBUTTONUP and settings.view == 'room_view': 
+                mouse_x,mouse_y = event.pos
+                puzzle_clicked = settings.current_room.get_puzzle_clicked(mouse_x,mouse_y)
+                if puzzle_clicked:
+                    settings.view = 'puzzle_view'
+                    settings.current_puzzle = puzzle_clicked
+                
         
-        my_room.draw()
+        if settings.view == 'room_view':
+            settings.current_room.draw()
+        elif settings.view == 'puzzle_view':
+            settings.current_puzzle.blit_puzzle()
         mouse_pos = pygame.mouse.get_pos()        
         if drawing:
             dots[-1].append(mouse_pos)
