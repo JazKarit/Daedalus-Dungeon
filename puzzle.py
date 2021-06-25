@@ -1,5 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
+from perspective_transform import wall_transform
+import cv2
 
 class Puzzle(Sprite):
 
@@ -11,10 +13,11 @@ class Puzzle(Sprite):
         
         # Load the puzzle image and get its rect attribute
         self.image = pygame.image.load(image_path)
+        self.orientation = 'center'
 
         # return a width and height of an image
         self.size = self.image.get_size()
-        # create a 2x bigger image than self.image
+        # resize
         self.image = pygame.transform.scale(self.image, (300, 300))
         self.rect = self.image.get_rect()
 
@@ -32,10 +35,27 @@ class Puzzle(Sprite):
         else:
             print("Sorry wrong answer, try again")
 
-    """A class to represent a single raindrop."""
-            
+    def save_perspective_image(self,orientation):
+        cv2.imwrite(self.image_path+"_"+orientation,wall_transform(self.image_path,orientation))
+
+    def set_orientation(self,orientation):
+
+        try:
+            self.image = pygame.image.load(self.image_path + '_' + orientation)
+
+        except:
+            self.save_perspective_image(orientation)
+            self.image = pygame.image.load(self.image_path + '_' + orientation)
+        
+        if orientation == 'left':
+            self.rect.x = 100
+            self.rect.y = 250
+        elif orientation == 'center':
+            self.rect.x = 670
+            self.rect.y = 350
+        elif orientation == 'right':
+            self.rect.x = 1050
+            self.rect.y = 250
+        
     def blitme(self):
-        """Draw the raindrop at its current location."""
-        # draw bigger image to screen at x=100 y=100 position
-        #self.screen.blit(self.smaller_img, [100,100])
         self.screen.blit(self.image, self.rect)

@@ -6,10 +6,6 @@ class Settings():
         # Screen settings.
         self.screen_width = 1500
         self.screen_height = 800
-        self.bg_color = (15, 177, 76)
-        
-        # Rain settings
-        self.rain_speed_factor = 2
-        
+        self.bg_color = (250,250,250)
        
         
