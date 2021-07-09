@@ -1,6 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 from perspective_transform import wall_transform
+from answer_box import AnswerBox
 import cv2
 
 class Puzzle(Sprite):
@@ -32,6 +33,8 @@ class Puzzle(Sprite):
         self.image_path  = image_path
         self.answer = answer
 
+        self.answer_box = AnswerBox(answer,1000,300,30,30,settings,screen)
+
     def try_to_answer(self,trial_answer):
 
         if self.answer == trial_answer:
@@ -41,17 +44,19 @@ class Puzzle(Sprite):
             print("Sorry wrong answer, try again")
 
     def save_perspective_image(self,orientation):
-        cv2.imwrite(self.image_path+"_"+orientation,wall_transform(self.image_path,orientation))
+        cv2.imwrite(self.image_path[0:-4] + "_" + orientation + '.jpg', wall_transform(self.image_path,orientation) ) 
 
     def set_orientation(self,orientation):
 
         try:
-            self.room_image = pygame.image.load(self.image_path + '_' + orientation)
+            self.room_image = pygame.image.load(self.image_path[0:-4] + '_' + orientation + '.jpg') 
 
         except:
             self.save_perspective_image(orientation)
-            self.room_image = pygame.image.load(self.image_path + '_' + orientation)
+            self.room_image = pygame.image.load(self.image_path[0:-4] + '_' + orientation + '.jpg')
         
+        self.room_rect = self.room_image.get_rect()
+
         if orientation == 'left':
             self.room_rect.x = 100
             self.room_rect.y = 250
