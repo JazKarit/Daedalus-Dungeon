@@ -4,7 +4,7 @@ import sys
 import time
 
 from settings import Settings
-from puzzle import Puzzle
+from door import Door
 from room import Room
 
 
@@ -21,7 +21,7 @@ def run_game():
 
 
     # Initialize game and create a screen object.
-    pygame.init()
+    pygame.init() 
     
     settings = Settings()
     screen = pygame.display.set_mode(
@@ -29,7 +29,10 @@ def run_game():
     pygame.display.set_caption("Daedalus' Dungeon")
 
 
-    puzzles = [Puzzle('puzzle_door.jpg',4.8,settings,screen),Puzzle('puzzle_2.jpg',10.8,settings,screen),Puzzle('puzzle_3.jpg',66,settings,screen)]
+    # puzzles = [Puzzle('puzzles/graph_walk_puzzle.jpg',4.8,settings,screen),Puzzle('puzzles/hex_puzzle.jpg',10.8,settings,screen),Puzzle('puzzles/puzzle_door.jpg',66,settings,screen)]
+    puzzles = [Door('art/locked_door.bmp','puzzles/graph_walk_puzzle.jpg',4.8,settings,screen),
+               Door('art/locked_door.bmp','puzzles/hex_puzzle.jpg',10.8,settings,screen),
+               Door('art/locked_door.bmp','puzzles/puzzle_door.jpg',66,settings,screen)]
     puzzles[0].set_orientation('center')
     puzzles[1].set_orientation('left')
     puzzles[2].set_orientation('right')

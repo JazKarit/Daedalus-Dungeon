@@ -1,6 +1,5 @@
 import pygame
 from pygame.sprite import Sprite
-from perspective_transform import wall_transform
 import cv2
 
 class Room():
