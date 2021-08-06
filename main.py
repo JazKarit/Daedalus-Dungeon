@@ -30,12 +30,14 @@ def run_game():
 
 
     # puzzles = [Puzzle('puzzles/graph_walk_puzzle.jpg',4.8,settings,screen),Puzzle('puzzles/hex_puzzle.jpg',10.8,settings,screen),Puzzle('puzzles/puzzle_door.jpg',66,settings,screen)]
-    puzzles = [Door('art/locked_door.bmp','puzzles/graph_walk_puzzle.jpg',4.8,settings,screen),
-               Door('art/locked_door.bmp','puzzles/hex_puzzle.jpg',10.8,settings,screen),
-               Door('art/locked_door.bmp','puzzles/puzzle_door.jpg',66,settings,screen)]
+    puzzles = [Door('art/locked_door.bmp', 'puzzles/graph_walk_puzzle.jpg', 4.8, settings, screen),
+               Door('art/locked_door.bmp', 'puzzles/hex_puzzle.jpg', 10.8, settings, screen),
+               Door('art/locked_door.bmp', 'puzzles/puzzle_door.jpg', 66, settings, screen),
+               Door('art/locked_door.bmp', 'puzzles/puzzle_2.jpg', 10.8, settings, screen)]
     puzzles[0].set_orientation('center')
     puzzles[1].set_orientation('left')
     puzzles[2].set_orientation('right')
+    puzzles[3].set_orientation('back')
 
     my_room = Room(puzzles)
     
@@ -52,7 +54,7 @@ def run_game():
             if settings.view == 'puzzle_view':
                 result = settings.current_puzzle.answer_box.handle_event(event)
                 if result == 'correct':
-                    print("That's correct!")
+                    settings.current_puzzle.set_as_solved()
                 elif result == 'wrong':
                     print("Sorry, incorrect")
             if event.type == pygame.QUIT:
@@ -77,6 +79,18 @@ def run_game():
                     settings.view = 'room_view'
                     settings.current_puzzle = None
                     strokes = []
+                elif event.key == pygame.K_RIGHT:
+                    my_room.turn_right()
+                elif event.key == pygame.K_LEFT:
+                    my_room.turn_left()
+                elif event.key == pygame.K_UP and settings.view == 'room_view':
+                    settings.view = 'puzzle_view'
+                    settings.current_puzzle = my_room.get_room_in_orientation('center')
+                elif event.key == pygame.K_DOWN and settings.view == 'puzzle_view':
+                    settings.view = 'room_view'
+                    settings.current_puzzle = None
+                    strokes = []
+
                 
         
         if settings.view == 'room_view':

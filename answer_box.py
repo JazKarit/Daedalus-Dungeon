@@ -16,6 +16,7 @@ class AnswerBox:
         self.settings = settings
         self.screen = screen
         self.correct_answer = correct_answer
+        self.is_invisible = False
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -29,7 +30,6 @@ class AnswerBox:
             self.color = COLOR_ACTIVE if self.active else COLOR_INACTIVE
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_RETURN:
-                print("return pressed")
                 if round(float(self.text),1) == self.correct_answer:
                     return 'correct'
                 else:
@@ -48,7 +48,8 @@ class AnswerBox:
         self.rect.w = width
 
     def draw(self, screen):
-        # Blit the text.
-        self.screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
-        # Blit the rect.
-        pygame.draw.rect(self.screen, self.color, self.rect, 2)
+        if not self.is_invisible:
+            # Blit the text.
+            self.screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
+            # Blit the rect.
+            pygame.draw.rect(self.screen, self.color, self.rect, 2)
